@@ -4,9 +4,31 @@ const { token, clientId } = require('./config.json');
 const wait = require('node:timers/promises').setTimeout;
 const client = new Client({ intents: [GatewayIntentBits.Guilds,GatewayIntentBits.GuildMessages,GatewayIntentBits.MessageContent], partials: [Partials.Channel,Partials.Message] });
 const commands = [
-	new SlashCommandBuilder().setName('purge').setDescription('Wipes a certain amount of messages').addNumberOption(option => option.setName('number').setDescription('How many messages to send').setRequired(true)),
-	new SlashCommandBuilder().setName('suggest').setDescription('Sends a suggestion to the creator of the bot').addStringOption(option => option.setName('text').setDescription('Your suggestion').setRequired(true)),
-	new SlashCommandBuilder().setName('censor').setDescription('Configures censored words'),
+	new SlashCommandBuilder().setName('purge')
+		.setDescription('Wipes a certain amount of messages')
+		.addNumberOption(option => option.setName('number')
+			.setDescription('How many messages to send')
+			.setRequired(true)
+		),
+
+	new SlashCommandBuilder().setName('suggest')
+		.setDescription('Sends a suggestion to the creator of the bot')
+		.addStringOption(option => option.setName('suggestion')
+			.setDescription('Your suggestion')
+			.setRequired(true)
+		),
+
+	new SlashCommandBuilder().setName('censor')
+		.setDescription('Configures censored words')
+		.addStringOption(option => option.setName("action")
+			.setRequired(true)
+			.addChoice('Remove', 'rem')
+            .addChoice('Add', 'add')
+			.addChoice('list', 'list')
+		)
+		.addStringOption(option => option.setName('word')
+			.setDescription('What word you are removing/adding')
+		),
 ]
 	.map(command => command.toJSON());
 
@@ -30,7 +52,7 @@ client.on('interactionCreate', async interaction => {
 
 	if (commandName === 'ping') await interaction.reply({content:'pong',ephemeral:true});
 
-	if (commandName === 'purge') {/*clear messages*/
+	if (commandName === 'purge') {//clear messages
 		const amount = options.getNumber("number");
 
 		if (99<amount|amount<2) {
@@ -38,7 +60,7 @@ client.on('interactionCreate', async interaction => {
 			return;
 		}
 
-		if (!interaction.member.permissions.has(PermissionsBitField.Flags.ManageChannels) && !interaction.user.username+interaction.user.discriminator==="whitespace2218") {
+		if (!interaction.member.permissions.has(PermissionsBitField.Flags.ManageChannels)) {
 			await interaction.reply({content:"You do not have permission to execute this command",ephemeral:true});
 			return;
 		}
@@ -49,7 +71,7 @@ client.on('interactionCreate', async interaction => {
 	}
 
 	if (commandName === 'suggest') {/*suggest things to me*/
-		console.log(`Suggestion by ${interaction.user.username}#${interaction.user.discriminator}: `+options.getString("text"));
+		console.log(`Suggestion by ${interaction.user.username}#${interaction.user.discriminator}: `+options.getString("suggestion"));
 		await interaction.reply({content:"Your suggestion was received",ephemeral:true});
 	}
 
