@@ -4,7 +4,6 @@ const { token, clientId } = require('./config.json');
 const wait = require('node:timers/promises').setTimeout;
 const client = new Client({ intents: [GatewayIntentBits.Guilds,GatewayIntentBits.GuildMessages,GatewayIntentBits.MessageContent], partials: [Partials.Channel,Partials.Message] });
 const commands = [
-	new SlashCommandBuilder().setName('ping').setDescription('This is a test command and will be removed when i feel like it'),
 	new SlashCommandBuilder().setName('purge').setDescription('Wipes a certain amount of messages').addNumberOption(option => option.setName('number').setDescription('How many messages to send').setRequired(true)),
 	new SlashCommandBuilder().setName('suggest').setDescription('Sends a suggestion to the creator of the bot').addStringOption(option => option.setName('text').setDescription('Your suggestion').setRequired(true)),
 	new SlashCommandBuilder().setName('censor').setDescription('Configures censored words'),
