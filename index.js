@@ -21,10 +21,13 @@ const commands = [
 	new SlashCommandBuilder().setName('censor')
 		.setDescription('Configures censored words')
 		.addStringOption(option => option.setName("action")
-			.setRequired(true)
-			.addChoice('Remove', 'rem')
-            .addChoice('Add', 'add')
-			.addChoice('list', 'list')
+				.setDescription("Your action.")
+				.setRequired(true)
+				.addChoices(
+					{name: "Add a word", value: "add"},
+					{name: "Remove a word", value: "rem"},
+					{name: "List blocked words", value: "list"},
+				)
 		)
 		.addStringOption(option => option.setName('word')
 			.setDescription('What word you are removing/adding')
@@ -39,7 +42,7 @@ rest.put(Routes.applicationCommands(clientId), { body: commands })
 	.catch(console.error);
 
 client.once('ready', () => {
-	console.log('Ready!');
+	console.log('Bot connected and ready');
 	client.user.setActivity('for memes in #general', {type: ActivityType.Watching });
 
 });
@@ -50,12 +53,10 @@ client.on('interactionCreate', async interaction => {
 
 	const { commandName, options } = interaction;
 
-	if (commandName === 'ping') await interaction.reply({content:'pong',ephemeral:true});
-
 	if (commandName === 'purge') {//clear messages
 		const amount = options.getNumber("number");
 
-		if (99<amount|amount<2) {
+		if (99<amount|amount<2) {//try to make better later
 			await interaction.reply({content:"Amount must be more than 2 and less than 99", ephemeral:true});
 			return;
 		}
@@ -73,6 +74,14 @@ client.on('interactionCreate', async interaction => {
 	if (commandName === 'suggest') {/*suggest things to me*/
 		console.log(`Suggestion by ${interaction.user.username}#${interaction.user.discriminator}: `+options.getString("suggestion"));
 		await interaction.reply({content:"Your suggestion was received",ephemeral:true});
+	}
+
+	if (commandName === 'censor') {/*suggest things to me*/
+		const action = options.getString("action");
+		const word = options.getString("word")
+		if (action === "list") {
+			//do later
+		}
 	}
 
 });
