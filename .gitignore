@@ -1,4 +1,4 @@
 config.json
 node_modules
 thaeithaihit
-.gitignore
+.DS_Store
