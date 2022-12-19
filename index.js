@@ -86,6 +86,11 @@ client.on('interactionCreate', async interaction => {
 
 });
 
+client.on('typingStart', (channel, user) => {
+  console.log(`${user.username} is typing in ${channel.name}`)
+  console.log(`${user.presence.status}`)
+});
+
 /*for censors later
 client.on('messageCreate', async message => {
 	message.channel.messages.fetch({limit: 20}).then(msgs => {
