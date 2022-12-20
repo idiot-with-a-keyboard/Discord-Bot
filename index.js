@@ -3,6 +3,10 @@ const { REST } = require('@discordjs/rest');
 const { token, clientId } = require('./config.json');
 const wait = require('node:timers/promises').setTimeout;
 const client = new Client({ intents: [GatewayIntentBits.Guilds,GatewayIntentBits.GuildMessages,GatewayIntentBits.MessageContent], partials: [Partials.Channel,Partials.Message] });
+commands = [
+	new SlashCommandBuilder().setName('help')
+		.setDescription('Display morse sheet & how to use'),
+] .map(command => command.toJSON());
 
 const rest = new REST({ version: '10' }).setToken(token);
 
