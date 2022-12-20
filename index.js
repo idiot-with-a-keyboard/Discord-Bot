@@ -35,4 +35,16 @@ client.on('messageCreate', async message => {
 });
 
 
+client.on('interactionCreate', async interaction => {
+	if (!interaction.isChatInputCommand()) return;
+
+	const { commandName, options } = interaction;
+
+	if (commandName === 'help') {//clear messages
+		await interaction.reply({content:'place -m before messages you wish to be auto translated',files: ['morse.png'], ephemeral:true});
+	}
+
+	});
+
+
 client.login(token);
