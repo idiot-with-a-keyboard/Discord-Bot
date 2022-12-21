@@ -26,21 +26,37 @@ client.on('messageCreate', async message => {
 	}
 	if (message.content.includes("-m")) {
 		txt=message.content.split(" ");
-		morse={'/': ' ', '.-': 'a', '-...': 'b', '-.-.': 'c', '-..': 'd', '.': 'e', '..-.': 'f', '--.': 'g', '....': 'h', '..': 'i', '.---': 'j', '-.-': 'k', '.-..': 'l', '--': 'm', '-.': 'n', '---': 'o', '.--.': 'p', '--.-': 'q', '.-.': 'r', '...': 's', '-': 't', '..-': 'u', '...-': 'v', '.--': 'w', '-..-': 'x', '-.--': 'y', '--..': 'z', '-----': '0', '.----': '1', '..---': '2', '...--': '3', '....-': '4', '.....': '5', '-....': '6', '--...': '7', '---..': '8', '----.': '9', '.-.-.-': '.', '--..--': ',', '-.-.--': '!', '---...': ':', '.----.': "'", '.-..-.': '"', '-....-': '-', '-..-.': '/', '.--.-.': '@', '-...-': '\n', '-.-.-.': ';'};
-		//symbols={'.-.-.': '+','..--..': '?','-...-':'=','-.-.-':'¡'}
-		//Troublesome :(
-		//I'll deal with them in a later update
-		prosigns={'.-.-.':'(OVER)','.-...':'(WAIT)','...-.':'(VERIFIED)','..--..':'(SAY AGAIN?)','..-.-':'(INTERROGATIVE)','........':'(CORRECTION)','-...-':'(BREAK)','-.-.-':'(ATTENTION)'}
+		morse={'/': ' ', '.-': 'a', '-...': 'b', '-.-.': 'c', '-..': 'd', '.': 'e', '..-.': 'f', '--.': 'g', '....': 'h', '..': 'i', '.---': 'j', '-.-': 'k', '.-..': 'l', '--': 'm', '-.': 'n', '---': 'o', '.--.': 'p', '--.-': 'q', '.-.': 'r', '...': 's', '-': 't', '..-': 'u', '...-': 'v', '.--': 'w', '-..-': 'x', '-.--': 'y', '--..': 'z', '-----': '0', '.----': '1', '..---': '2', '...--': '3', '....-': '4', '.....': '5', '-....': '6', '--...': '7', '---..': '8', '----.': '9'};
+		symbols={'.-.-.-': '.', '--..--': ',', '-.-.--': '!', '..--..': '?', '---...': ':', '.----.': "'", '.-..-.': '"', '-....-': '-', '.-.-.': '+', '-..-.': '/', '.--.-.': '@', '-...-':'\n', '-.-.-.': ';', '-.-.-':'¡'}
+		/* Still Troublesome :(
+		I'll deal with = in an even later update (and maybe (SAY AGAIN?) as well)
+		Removed the (SAY AGAIN?) prosign because i'd rather have a ? instead
+		Moving (SAY AGAIN?) from prosigns to abbreviations*/
+		prosigns={'.-.-.':'(OVER)','.-...':'(WAIT)','...-.':'(VERIFIED)','..-.-':'(INTERROGATIVE)','........':'(CORRECTION)','-.-.-':'(ATTENTION)'}
 		let resp = "";
 		for (let i=1;i<Object.keys(txt).length;i++) {
 			if (morse[txt[i]] !== undefined) {
 				resp+=morse[txt[i]];
 			}
-			else if (prosigns[txt[i]] !== undefined) {
-				resp+=prosigns[txt[i]];
-			}
-			else {
-				resp+="�"
+			else { //Symbols, Prosigns, and Undefined
+
+				if (symbols[txt[i]]==="+" || symbols[txt[i]]==="¡") {
+					if (symbols[txt[i]]==="¡") {
+						if (i===1) resp+="(ATTENTION)"
+						else resp+="¡"
+					}
+					if (symbols[txt[i]]==="+") {
+						if (i===Object.keys(txt).length-1) resp+="(OVER)"
+						else resp+="+"
+					}
+				}
+				else if (prosigns[txt[i]] !== undefined) resp+=prosigns[txt[i]] //All other prosigns
+				else if (symbols[txt[i]] !== undefined) resp+=symbols[txt[i]] //All other symbols
+
+				else { //Undefined
+					resp+="�"
+				}
+
 			}
 		}
 		message.reply({content: `\`\`\`${message.author.username}#${message.author.discriminator}:\n${resp}\`\`\``, ephemeral: true})}
