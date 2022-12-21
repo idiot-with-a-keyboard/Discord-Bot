@@ -32,7 +32,7 @@ client.on('messageCreate', async message => {
 		I'll deal with = in an even later update (and maybe (SAY AGAIN?) as well)
 		Removed the (SAY AGAIN?) prosign because i'd rather have a ? instead
 		Moving (SAY AGAIN?) from prosigns to abbreviations*/
-		prosigns={'.-.-.':'(OVER)','.-...':'(WAIT)','...-.':'(VERIFIED)','..-.-':'(INTERROGATIVE)','........':'(CORRECTION)','-.-.-':'(ATTENTION)'}
+		prosigns={'.-.-.':'(OVER)','.-...':'(WAIT)','...-.':'(VERIFIED)','..-.-':'(INTERROGATIVE)','........':'(CORRECTION)','-.-.-':'(ATTENTION)', '...---...':'(EMERGENCY)'}
 		let resp = "";
 		for (let i=1;i<Object.keys(txt).length;i++) {
 			if (morse[txt[i]] !== undefined) {
